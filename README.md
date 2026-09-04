@@ -66,6 +66,14 @@ PROG6212-POE-PART-1-RaceDay-Event-Management-System/
 - Authentication is session based and enforced at the API level in Part 2
 │   ├── ERD.drawio.png
 │   ├── RaceDay-API-EndPoint-Plan..pdf
+
+## Tech Stack
+- **Database:** SQL Server (SSMS)
+- **API:** ASP.NET Core Web API in C# (Part 2)
+- **Frontend:** ASP.NET Core MVC (Part 3)
+- **Cloud Storage:** Azure Blob Storage (Part 3)
+- **Containerisation:** Docker (Part 3)
+- **CI/CD:** GitHub Actions
 │   └── raceday_database.sql
 │
 └── README.md
