@@ -72,6 +72,10 @@ PROG6212-POE-PART-1-RaceDay-Event-Management-System/
 - **API:** ASP.NET Core Web API in C# (Part 2)
 - **Frontend:** ASP.NET Core MVC (Part 3)
 - **Cloud Storage:** Azure Blob Storage (Part 3)
+
+## Submission
+This repository is submitted via ARC for PROG6212 Part 1.
+All planning documents are located in the /docs folder.
 - **Containerisation:** Docker (Part 3)
 - **CI/CD:** GitHub Actions
 │   └── raceday_database.sql
