@@ -4,6 +4,8 @@
 **Module:** PROG6212 - Programming 2B  
 **Student:** Lerato Maropola 
 **Student Number:** ST10449273
+**Part:** 1 - System Planning and Database  
+**Total Marks:** 100
 **GitHub:** [PROG6212-POE-PART-1-RaceDay-Event-Management-System](https://github.com/Lerato-22/PROG6212-POE-PART-1-RaceDay-Event-Management-System)
 
 ## System Description
