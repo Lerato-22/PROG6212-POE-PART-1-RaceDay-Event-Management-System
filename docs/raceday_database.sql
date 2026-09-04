@@ -1,4 +1,8 @@
 
+-- Student: Lerato Maropola
+-- Module: PROG6212 - Programming 2B
+-- Part: 1 - System Planning and Database
+
 CREATE DATABASE RaceDay;
 GO
 
