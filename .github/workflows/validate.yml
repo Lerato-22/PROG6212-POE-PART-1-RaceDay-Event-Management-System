@@ -26,7 +26,7 @@ jobs:
         run: |
           files=(
             "docs/ERD.drawio.png"
-            "docs/raceday_api_endpoint_plan.pdf"
+            "docs/RaceDay-API-EndPoint-Plan..pdf"
             "docs/raceday_database.sql"
           )
           for f in "${files[@]}"; do
