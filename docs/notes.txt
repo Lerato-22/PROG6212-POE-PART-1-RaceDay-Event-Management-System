@@ -1,0 +1,4 @@
+
+Part 1 - Planning documents complete
+Part 2 - API development (coming soon)
+Part 3 - MVC and Docker (coming soon)
