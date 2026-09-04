@@ -58,6 +58,12 @@ PROG6212-POE-PART-1-RaceDay-Event-Management-System/
 │       └── validate.yml
 │
 ├── docs/
+
+## Role Based Access
+- Organiser endpoints are completely inaccessible to Participants
+- Participant endpoints are completely inaccessible to Organisers
+- Public endpoints such as viewing events are accessible to everyone
+- Authentication is session based and enforced at the API level in Part 2
 │   ├── ERD.drawio.png
 │   ├── RaceDay-API-EndPoint-Plan..pdf
 │   └── raceday_database.sql
