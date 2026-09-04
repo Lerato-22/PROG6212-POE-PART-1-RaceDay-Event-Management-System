@@ -42,6 +42,7 @@ All planning documents are located in the `/docs` folder:
 The GitHub Actions workflow validates that the `/docs` folder exists and contains all required planning files on every push to main.
 
 ![CI/CD Green Build](docs/ci_screenshot.png)
+<img width="1357" height="530" alt="ci_screenshot png" src="https://github.com/user-attachments/assets/a57a82ee-e9f5-4f5d-a383-f96a83bb6509" />
 
 ## Video Presentation
 
