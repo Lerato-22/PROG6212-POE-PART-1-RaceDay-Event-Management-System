@@ -22,12 +22,11 @@ namespace RaceDay.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
         {
+            if (dto == null)
+                return BadRequest(new { message = "Request body cannot be empty." });
+
             if (!new[] { "Organiser", "Participant" }.Contains(dto.Role))
                 return BadRequest(new { message = "Role must be Organiser or Participant." });
-
-            if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
-                return Conflict(new { message = "Email already exists." });
-
             var user = new User
             {
                 FirstName = dto.FirstName,
@@ -63,10 +62,10 @@ namespace RaceDay.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (dto == null)
+                return BadRequest(new { message = "Request body cannot be empty." });
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Unauthorized(new { message = "Invalid email or password." });
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
             // Store in session
             HttpContext.Session.SetInt32("UserId", user.UserId);
