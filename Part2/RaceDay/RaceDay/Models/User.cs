@@ -30,12 +30,13 @@ namespace RaceDay.Models
         public string Role { get; set; } = string.Empty;
 
         [MaxLength(20)]
+        [RegularExpression(@"^\+?[0-9\s\-]{7,20}$", ErrorMessage = "Please enter a valid phone number.")]
         public string? PhoneNumber { get; set; }
 
         [MaxLength(1000)]
         public string? ProfilePictureUrl { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
         public Profile? Profile { get; set; }
