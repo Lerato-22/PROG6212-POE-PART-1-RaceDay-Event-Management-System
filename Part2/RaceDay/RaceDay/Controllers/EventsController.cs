@@ -144,14 +144,14 @@ namespace RaceDay.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO dto)
         {
+            if (dto == null)
+                return BadRequest(new { message = "Request body cannot be empty." });
+
             var userId = HttpContext.Session.GetInt32("UserId");
             var role = HttpContext.Session.GetString("Role");
 
             if (userId == null || role != "Organiser")
                 return Unauthorized(new { message = "Organiser access required." });
-
-            if (!new[] { "Run", "Walk", "Cycle" }.Contains(dto.EventType))
-                return BadRequest(new { message = "EventType must be Run, Walk, or Cycle." });
 
             var newEvent = new Event
             {
