@@ -16,6 +16,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Returns the profile of the currently logged-in user including personal details.</summary>
         // GET /api/profile
         [HttpGet]
         public async Task<IActionResult> GetProfile()
@@ -45,6 +46,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Updates the profile of the currently logged-in user including date of birth and emergency contact.</summary>
         // PUT /api/profile
         [HttpPut]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO dto)
