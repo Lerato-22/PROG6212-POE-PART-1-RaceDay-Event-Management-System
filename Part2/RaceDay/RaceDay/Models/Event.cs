@@ -15,6 +15,7 @@ namespace RaceDay.Models
         [MaxLength(200)]
         public string EventName { get; set; } = string.Empty;
 
+        [MaxLength(2000)]
         public string? Description { get; set; }
 
         [Required]
@@ -25,6 +26,7 @@ namespace RaceDay.Models
         public string Location { get; set; } = string.Empty;
 
         [Required]
+        [Range(0.1, 1000.0, ErrorMessage = "Distance must be between 0.1 and 1000 km.")]
         public decimal Distance { get; set; }
 
         [Required]
@@ -34,7 +36,7 @@ namespace RaceDay.Models
         [MaxLength(1000)]
         public string? BannerImageUrl { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
         [ForeignKey("OrganiserId")]
