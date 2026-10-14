@@ -13,9 +13,10 @@ namespace RaceDay.Models
 
         [Required]
         [MaxLength(100)]
+        [MinLength(2, ErrorMessage = "Category name must be at least 2 characters.")]
         public string CategoryName { get; set; } = string.Empty;
 
-        [MaxLength(300)]
+        [MaxLength(500)]
         public string? Description { get; set; }
 
         // Navigation properties
