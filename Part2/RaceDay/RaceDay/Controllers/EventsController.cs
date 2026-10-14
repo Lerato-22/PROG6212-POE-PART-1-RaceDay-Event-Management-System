@@ -17,6 +17,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Returns all events. Optionally filter by eventType (Run, Walk, Cycle).</summary>
         // GET /api/events
         [HttpGet]
         public async Task<IActionResult> GetAllEvents([FromQuery] string? eventType)
@@ -58,6 +59,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Returns all events created by the logged-in Organiser.</summary>
         // GET /api/events/my
         [HttpGet("my")]
         public async Task<IActionResult> GetMyEvents()
@@ -99,6 +101,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Returns a single event by ID including its categories and enrolment count.</summary>
         // GET /api/events/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvent(int id)
@@ -136,6 +139,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Creates a new event. Organiser role required.</summary>
         // POST /api/events
         [HttpPost]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO dto)
@@ -177,6 +181,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Updates an existing event. Organiser must own the event.</summary>
         // PUT /api/events/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] UpdateEventDTO dto)
@@ -209,6 +214,7 @@ namespace RaceDay.Controllers
             return Ok(new { message = "Event updated successfully.", eventId = id });
         }
 
+        /// <summary>Deletes an event. Organiser must own the event.</summary>
         // DELETE /api/events/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
