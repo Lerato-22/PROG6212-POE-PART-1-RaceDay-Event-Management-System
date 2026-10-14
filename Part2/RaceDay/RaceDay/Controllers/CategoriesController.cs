@@ -17,6 +17,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Returns all categories for a specific event.</summary>
         // GET /api/events/{eventId}/categories
         [HttpGet]
         public async Task<IActionResult> GetCategories(int eventId)
@@ -40,6 +41,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Creates a new category for an event. Organiser must own the event.</summary>
         // POST /api/events/{eventId}/categories
         [HttpPost]
         public async Task<IActionResult> CreateCategory(int eventId, [FromBody] CreateCategoryDTO dto)
@@ -76,6 +78,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Updates an existing category. Organiser must own the event.</summary>
         // PUT /api/events/{eventId}/categories/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(int eventId, int id, [FromBody] UpdateCategoryDTO dto)
@@ -113,6 +116,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Deletes a category from an event. Organiser must own the event.</summary>
         // DELETE /api/events/{eventId}/categories/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int eventId, int id)
