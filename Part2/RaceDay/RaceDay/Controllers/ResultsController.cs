@@ -17,6 +17,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Captures a finish time and position for an enrolled Participant. Organiser role required.</summary>
         // POST /api/results
         [HttpPost]
         public async Task<IActionResult> CreateResult([FromBody] CreateResultDTO dto)
@@ -65,6 +66,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Updates an existing result. Organiser must own the event.</summary>
         // PUT /api/results/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateResult(int id, [FromBody] UpdateResultDTO dto)
@@ -95,6 +97,7 @@ namespace RaceDay.Controllers
             return Ok(new { message = "Result updated successfully.", resultId = id });
         }
 
+        /// <summary>Returns all results for the logged-in Participant across all completed events.</summary>
         // GET /api/results/my
         [HttpGet("my")]
         public async Task<IActionResult> GetMyResults()
@@ -129,6 +132,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Returns all results for a specific event. Organiser must own the event.</summary>
         // GET /api/events/{eventId}/results
         [HttpGet("/api/events/{eventId}/results")]
         public async Task<IActionResult> GetEventResults(int eventId)
