@@ -19,9 +19,10 @@ namespace RaceDay.Models
 
         [Required]
         [MaxLength(20)]
+        [RegularExpression("^(Pending|Confirmed|Cancelled)$", ErrorMessage = "Status must be Pending, Confirmed, or Cancelled.")]
         public string Status { get; set; } = "Pending";
 
-        public DateTime EnrolledAt { get; set; } = DateTime.Now;
+        public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
         [ForeignKey("ParticipantId")]
