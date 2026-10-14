@@ -17,6 +17,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Enrols a Participant into an event under a selected category.</summary>
         // POST /api/enrolments
         [HttpPost]
         public async Task<IActionResult> CreateEnrolment([FromBody] CreateEnrolmentDTO dto)
@@ -63,6 +64,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Returns all enrolments for the logged-in Participant.</summary>
         // GET /api/enrolments/my
         [HttpGet("my")]
         public async Task<IActionResult> GetMyEnrolments()
@@ -95,6 +97,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Returns all enrolments for a specific event. Organiser must own the event.</summary>
         // GET /api/events/{eventId}/enrolments
         [HttpGet("/api/events/{eventId}/enrolments")]
         public async Task<IActionResult> GetEventEnrolments(int eventId)
@@ -133,6 +136,7 @@ namespace RaceDay.Controllers
             return Ok(response);
         }
 
+        /// <summary>Updates the status of an enrolment to Pending, Confirmed, or Cancelled.</summary>
         // PUT /api/enrolments/{id}/status
         [HttpPut("{id}/status")]
         public async Task<IActionResult> UpdateEnrolmentStatus(int id, [FromBody] UpdateEnrolmentStatusDTO dto)
@@ -162,6 +166,7 @@ namespace RaceDay.Controllers
             return Ok(new { message = "Enrolment status updated.", status = dto.Status });
         }
 
+        /// <summary>Cancels and removes an enrolment. Participant must own the enrolment.</summary>
         // DELETE /api/enrolments/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEnrolment(int id)
