@@ -17,6 +17,7 @@ namespace RaceDay.Controllers
             _context = context;
         }
 
+        /// <summary>Registers a new user as either an Organiser or Participant.</summary>
         // POST /api/auth/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
@@ -57,6 +58,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Logs in a user and creates a session storing their ID and role.</summary>
         // POST /api/auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
@@ -84,6 +86,7 @@ namespace RaceDay.Controllers
             });
         }
 
+        /// <summary>Logs out the current user and clears their session.</summary>
         // POST /api/auth/logout
         [HttpPost("logout")]
         public IActionResult Logout()
