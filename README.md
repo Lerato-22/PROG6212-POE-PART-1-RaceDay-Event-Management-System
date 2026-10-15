@@ -78,6 +78,59 @@ PROG6212-POE-PART-1-RaceDay-Event-Management-System/
 ## Submission
 This repository is submitted via ARC for PROG6212 Part 1.
 All planning documents are located in the /docs folder.
+
+## Part 2 - RESTful API
+
+### System Description
+RaceDay is a full-stack event management system built for the South African road running, walking, and cycling community. The Part 2 API is built using ASP.NET Core Web API in C# with Entity Framework Core Code First connected to a SQL Server database.
+
+### User Roles
+- **Organiser** - Can create, edit, and delete events, manage categories, view all enrolments, and capture participant results.
+- **Participant** - Can register an account, browse events, enrol into events by selecting a category, and view their personal results.
+
+### Setup and Run Instructions
+1. Open **Visual Studio 2022**
+2. Open the solution file at `Part2/RaceDay/RaceDay.slnx`
+3. Update the connection string in `Part2/RaceDay/RaceDay/appsettings.json` to match your local SQL Server instance
+4. Open the **Package Manager Console** and run:
+5. Press **F5** to run the API
+6. Navigate to `https://localhost:{port}/swagger` to view and test all endpoints
+
+### API Endpoints
+
+| HTTP Method | Route | Description | Role |
+|---|---|---|---|
+| POST | /api/auth/register | Register a new user | Public |
+| POST | /api/auth/login | Login and create session | Public |
+| POST | /api/auth/logout | Logout and clear session | Any |
+| GET | /api/profile | View own profile | Any |
+| PUT | /api/profile | Update own profile | Any |
+| GET | /api/events | View all events | Public |
+| GET | /api/events/{id} | View single event | Public |
+| GET | /api/events/my | View organiser's own events | Organiser |
+| POST | /api/events | Create a new event | Organiser |
+| PUT | /api/events/{id} | Update an event | Organiser |
+| DELETE | /api/events/{id} | Delete an event | Organiser |
+| GET | /api/events/{eventId}/categories | View categories for an event | Public |
+| POST | /api/events/{eventId}/categories | Add a category to an event | Organiser |
+| PUT | /api/events/{eventId}/categories/{id} | Update a category | Organiser |
+| DELETE | /api/events/{eventId}/categories/{id} | Delete a category | Organiser |
+| POST | /api/enrolments | Enrol into an event | Participant |
+| GET | /api/enrolments/my | View own enrolments | Participant |
+| GET | /api/events/{eventId}/enrolments | View all enrolments for an event | Organiser |
+| PUT | /api/enrolments/{id}/status | Update enrolment status | Organiser |
+| DELETE | /api/enrolments/{id} | Cancel an enrolment | Participant |
+| POST | /api/results | Capture a participant result | Organiser |
+| PUT | /api/results/{id} | Update a result | Organiser |
+| GET | /api/results/my | View own results | Participant |
+| GET | /api/events/{eventId}/results | View all results for an event | Organiser |
+
+### Part 2 CI/CD Screenshot
+![Part 2 CI/CD Green Build](ci_screenshot.png.png)
+<img width="1343" height="629" alt="ci-screenshot" src="https://github.com/user-attachments/assets/d00c2669-09de-45c4-9df1-ede771829589" />
+
+### Part 2 Video Presentation
+[Part 2 Video Walkthrough - YouTube](https://youtu.be/COMING_SOON)
 - **Containerisation:** Docker (Part 3)
 - **CI/CD:** GitHub Actions
 │   └── raceday_database.sql
