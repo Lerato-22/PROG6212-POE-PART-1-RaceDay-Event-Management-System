@@ -79,14 +79,29 @@ PROG6212-POE-PART-1-RaceDay-Event-Management-System/
 This repository is submitted via ARC for PROG6212 Part 1.
 All planning documents are located in the /docs folder.
 
-## Part 2 - RESTful API
+---
+
+## Part 2 - RESTful API Development
+
+**Module:** PROG6212 - Programming 2B
+**Student:** Lerato Maropola **Student Number:** ST10449273 **Part:** 2 - RESTful API Development
+**Total Marks:** 100 **GitHub:** [PROG6212-POE-PART-1-RaceDay-Event-Management-System](https://github.com/Lerato-22/PROG6212-POE-PART-1-RaceDay-Event-Management-System)
 
 ### System Description
-RaceDay is a full-stack event management system built for the South African road running, walking, and cycling community. The Part 2 API is built using ASP.NET Core Web API in C# with Entity Framework Core Code First connected to a SQL Server database.
+
+RaceDay is a full-stack web-based event management system built for the South African road running, walking, and cycling community. The platform allows Organisers to create and manage events, categories, and participant results, while Participants can browse upcoming events, enrol, track their personal performance history, and prepare for race day.
+
+This is Part 2 of the Portfolio of Evidence which covers the RESTful API development phase — including authentication, role-based access control, all CRUD endpoints, Swagger integration, unit testing, and GitHub Actions CI/CD. No MVC front end is built in this part.
 
 ### User Roles
 - **Organiser** - Can create, edit, and delete events, manage categories, view all enrolments, and capture participant results.
 - **Participant** - Can register an account, browse events, enrol into events by selecting a category, and view their personal results.
+
+### Role Based Access
+- Organiser endpoints are completely inaccessible to Participants
+- Participant endpoints are completely inaccessible to Organisers
+- Public endpoints such as viewing events are accessible to everyone
+- Authentication is session based and enforced at the API level
 
 ### Setup and Run Instructions
 1. Open **Visual Studio 2022**
@@ -96,7 +111,7 @@ RaceDay is a full-stack event management system built for the South African road
 5. Press **F5** to run the API
 6. Navigate to `https://localhost:{port}/swagger` to view and test all endpoints
 
-### API Endpoints
+### API Endpoint Table
 
 | HTTP Method | Route | Description | Role |
 |---|---|---|---|
@@ -107,7 +122,7 @@ RaceDay is a full-stack event management system built for the South African road
 | PUT | /api/profile | Update own profile | Any |
 | GET | /api/events | View all events | Public |
 | GET | /api/events/{id} | View single event | Public |
-| GET | /api/events/my | View organiser's own events | Organiser |
+| GET | /api/events/my | View organiser own events | Organiser |
 | POST | /api/events | Create a new event | Organiser |
 | PUT | /api/events/{id} | Update an event | Organiser |
 | DELETE | /api/events/{id} | Delete an event | Organiser |
@@ -125,15 +140,53 @@ RaceDay is a full-stack event management system built for the South African road
 | GET | /api/results/my | View own results | Participant |
 | GET | /api/events/{eventId}/results | View all results for an event | Organiser |
 
-### Part 2 CI/CD Screenshot
-![Part 2 CI/CD Green Build](ci_screenshot.png.png)
-<img width="1343" height="629" alt="ci-screenshot" src="https://github.com/user-attachments/assets/d00c2669-09de-45c4-9df1-ede771829589" />
-
-### Part 2 Video Presentation
-[Part 2 Video Walkthrough - YouTube](https://youtu.be/COMING_SOON)
-- **Containerisation:** Docker (Part 3)
+### Tech Stack
+- **Database:** SQL Server (SSMS) with Entity Framework Core Code First
+- **API:** ASP.NET Core Web API in C#
+- **Authentication:** BCrypt password hashing with session management
+- **Testing:** xUnit unit tests with in-memory database
 - **CI/CD:** GitHub Actions
-│   └── raceday_database.sql
-│
-└── README.md
-```
+- **Frontend:** ASP.NET Core MVC (Part 3)
+- **Cloud Storage:** Azure Blob Storage (Part 3)
+
+### CI/CD Screenshot
+
+![Part 2 CI/CD Green Build](ci_screenshot_part2.png)
+<img width="1343" height="629" alt="ci_screenshot_part2" src="https://github.com/user-attachments/assets/90ead358-6931-47e9-8266-5f7e73ed80e2" />
+
+### Video Presentation
+
+[Part 2 Video Walkthrough - YouTube]
+https://youtu.be/kzZiEKb7YCk?si=yKKlxHPpG5vPNFaH
+
+### Submission
+This repository is submitted via ARC for PROG6212 Part 2.
+All API source code is located in the Part2/RaceDay folder.
+
+### Repository Structure
+PROG6212-POE-PART-1-RaceDay-Event-Management-System/
+|
+|-- .github/
+| └── workflows/
+| |── validate.yml
+| └── part2-ci.yml
+|
+|-- docs/
+| |── ERD.drawio.png
+| |── RaceDay-API-EndPoint-Plan.pdf
+| └── RaceDay-SQL-Script.sql
+|
+└── Part2/
+└── RaceDay/
+|── RaceDay/
+| |── Controllers/
+| |── Models/
+| |── DTOs/
+| |── Data/
+| |── Migrations/
+| └── appsettings.json
+└── RaceDay.Tests/
+|── AuthControllerTests.cs
+|── EventsControllerTests.cs
+|── EnrolmentsControllerTests.cs
+└── TestSession.cs
