@@ -480,6 +480,7 @@ The `.github/workflows/ci.yml` pipeline runs on every push and pull request to `
 > See `ci_screenshot.png` in the root of this repository for the green build screenshot.
 
 ![CI/CD Green Build](./ci_screenshot.png)
+<img width="1333" height="631" alt="image" src="https://github.com/user-attachments/assets/db38d2bc-c41c-48d1-aa74-b0b8f9f1070e" />
 
 ---
 
