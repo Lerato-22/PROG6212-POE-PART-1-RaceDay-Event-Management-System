@@ -1,0 +1,156 @@
+name: RaceDay CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 1: Validate Part 1 docs folder structure
+  # ─────────────────────────────────────────────────────────────
+  validate-docs:
+    name: ✅ Validate Part 1 Docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check /docs folder exists
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "❌ ERROR: /docs folder is missing!"
+            exit 1
+          fi
+          echo "✅ /docs folder found"
+
+      - name: Check required docs files exist
+        run: |
+          MISSING=0
+
+          if ls docs/*.png 1> /dev/null 2>&1 || ls docs/*.pdf 1> /dev/null 2>&1; then
+            echo "✅ ERD or PDF file found in /docs"
+          else
+            echo "❌ ERROR: No ERD image or PDF found in /docs"
+            MISSING=1
+          fi
+
+          if ls docs/*.sql 1> /dev/null 2>&1; then
+            echo "✅ SQL script found in /docs"
+          else
+            echo "❌ ERROR: No .sql file found in /docs"
+            MISSING=1
+          fi
+
+          if [ "$MISSING" -eq 1 ]; then
+            echo "❌ One or more required files are missing from /docs"
+            exit 1
+          fi
+
+          echo "✅ All required Part 1 docs are present"
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 2: Build and test Part 2 API
+  # ─────────────────────────────────────────────────────────────
+  build-and-test-api:
+    name: 🔨 Build & Test Part 2 API
+    runs-on: ubuntu-latest
+    needs: validate-docs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore API dependencies
+        run: dotnet restore Part2/RaceDay/RaceDay/RaceDay.csproj
+
+      - name: Build API
+        run: dotnet build Part2/RaceDay/RaceDay/RaceDay.csproj --no-restore --configuration Release
+
+      - name: Restore test dependencies
+        run: dotnet restore Part2/RaceDay/RaceDay.Tests/RaceDay.Tests.csproj
+
+      - name: Build tests
+        run: dotnet build Part2/RaceDay/RaceDay.Tests/RaceDay.Tests.csproj --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: |
+          dotnet test Part2/RaceDay/RaceDay.Tests/RaceDay.Tests.csproj \
+            --no-build \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-test-results
+          path: Part2/RaceDay/RaceDay.Tests/TestResults/*.trx
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 3: Build Part 3 MVC application
+  # ─────────────────────────────────────────────────────────────
+  build-mvc:
+    name: 🖥️ Build Part 3 MVC
+    runs-on: ubuntu-latest
+    needs: build-and-test-api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore MVC dependencies
+        run: dotnet restore Part3/RaceDay.MVC/RaceDay.MVC.csproj
+
+      - name: Build MVC application
+        run: dotnet build Part3/RaceDay.MVC/RaceDay.MVC.csproj --no-restore --configuration Release
+
+      - name: Publish MVC (verify release build)
+        run: |
+          dotnet publish Part3/RaceDay.MVC/RaceDay.MVC.csproj \
+            --no-build \
+            --configuration Release \
+            --output ./publish/mvc
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 4: Build Docker image for MVC
+  # ─────────────────────────────────────────────────────────────
+  build-docker:
+    name: 🐳 Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build-mvc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t raceday-mvc:latest \
+            -f Part3/RaceDay.MVC/Dockerfile \
+            Part3/RaceDay.MVC/
+
+      - name: Verify Docker image was created
+        run: |
+          if docker image inspect raceday-mvc:latest > /dev/null 2>&1; then
+            echo "✅ Docker image raceday-mvc:latest built successfully"
+            docker images raceday-mvc
+          else
+            echo "❌ Docker image build failed"
+            exit 1
+          fi
