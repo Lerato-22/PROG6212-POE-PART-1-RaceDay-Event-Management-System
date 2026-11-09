@@ -1,0 +1,85 @@
+﻿@model List<RaceDay.MVC.Models.CategoryModel>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4>Event Categories</h4>
+        <p>Manage age and distance categories for this event</p>
+    </div>
+    <a asp-action="Dashboard" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">Add Category</div>
+            <div class="card-body p-4">
+                <form asp-action="AddCategory" asp-route-eventId="@ViewBag.EventId" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Category Name</label>
+                        <input name="Name" class="form-control" placeholder="e.g. Under 20, Senior, 21km" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select name="Type" class="form-select">
+                            <option value="Age">Age</option>
+                            <option value="Distance">Distance</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Description</label>
+                        <input name="Description" class="form-control"
+                               placeholder="e.g. Runners aged 20 and under" />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">Existing Categories</div>
+            <div class="card-body p-0">
+                @if (!Model.Any())
+                {
+                    <p class="text-muted text-center py-4">No categories added yet.</p>
+                }
+                else
+                {
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cat in Model)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@cat.Name</td>
+                                    <td><span class="badge bg-secondary">@cat.Type</span></td>
+                                    <td>@cat.Description</td>
+                                    <td>
+                                        <form asp-action="DeleteCategory"
+                                              asp-route-eventId="@ViewBag.EventId"
+                                              asp-route-id="@cat.CategoryId"
+                                              method="post" class="d-inline"
+                                              onsubmit="return confirm('Delete this category?')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>

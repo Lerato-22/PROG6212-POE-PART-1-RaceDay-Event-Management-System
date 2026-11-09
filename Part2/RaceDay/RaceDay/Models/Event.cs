@@ -34,7 +34,7 @@ namespace RaceDay.Models
         public string EventType { get; set; } = string.Empty;
 
         [MaxLength(1000)]
-        public string? BannerImageUrl { get; set; }
+        public string BannerImageUrl { get; set; } = "";
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -1,0 +1,45 @@
+﻿@model RaceDay.MVC.Models.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="page-header">
+    <h4>My Profile</h4>
+    <p>View and update your personal information</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body p-4">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">@Html.ValidationSummary(false)</div>
+                }
+                <form asp-action="Profile" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input name="FullName" value="@Model?.FullName"
+                               class="form-control" placeholder="Your full name" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input value="@Model?.Email" class="form-control" disabled />
+                        <div class="form-text">Email address cannot be changed.</div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Phone Number</label>
+                        <input name="PhoneNumber" value="@Model?.PhoneNumber"
+                               class="form-control" placeholder="e.g. 071 234 5678" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <input value="@Model?.Role" class="form-control" disabled />
+                    </div>
+                    <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

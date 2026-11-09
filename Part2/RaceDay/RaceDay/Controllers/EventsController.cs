@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RaceDay.Data;
 using RaceDay.DTOs;
 using RaceDay.Models;
+using RaceDay.API.Services;
 
 namespace RaceDay.Controllers
 {
@@ -11,10 +12,12 @@ namespace RaceDay.Controllers
     public class EventsController : ControllerBase
     {
         private readonly RaceDayContext _context;
+        private readonly BlobStorageService _blobStorageService;
 
-        public EventsController(RaceDayContext context)
+        public EventsController(RaceDayContext context, BlobStorageService blobStorageService)
         {
             _context = context;
+            _blobStorageService = blobStorageService;
         }
 
         /// <summary>Returns all events. Optionally filter by eventType (Run, Walk, Cycle).</summary>
@@ -37,7 +40,7 @@ namespace RaceDay.Controllers
             {
                 EventId = e.EventId,
                 OrganiserId = e.OrganiserId,
-                OrganizerName = $"{e.Organiser!.FirstName} {e.Organiser.LastName}",
+                OrganizerName = e.Organiser != null ? $"{e.Organiser.FirstName} {e.Organiser.LastName}" : "",
                 EventName = e.EventName,
                 Description = e.Description,
                 EventDate = e.EventDate,
@@ -119,7 +122,7 @@ namespace RaceDay.Controllers
             {
                 EventId = e.EventId,
                 OrganiserId = e.OrganiserId,
-                OrganizerName = $"{e.Organiser!.FirstName} {e.Organiser.LastName}",
+                OrganizerName = e.Organiser != null ? $"{e.Organiser.FirstName} {e.Organiser.LastName}" : "",
                 EventName = e.EventName,
                 Description = e.Description,
                 EventDate = e.EventDate,
@@ -139,10 +142,10 @@ namespace RaceDay.Controllers
             });
         }
 
-        /// <summary>Creates a new event. Organiser role required.</summary>
+        /// <summary>Creates a new event with optional banner image. Organiser role required.</summary>
         // POST /api/events
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO dto)
+        public async Task<IActionResult> CreateEvent([FromForm] CreateEventDTO dto)
         {
             if (dto == null)
                 return BadRequest(new { message = "Request body cannot be empty." });
@@ -153,6 +156,10 @@ namespace RaceDay.Controllers
             if (userId == null || role != "Organiser")
                 return Unauthorized(new { message = "Organiser access required." });
 
+            string? bannerImageUrl = null;
+            if (dto.BannerImage != null && dto.BannerImage.Length > 0)
+                bannerImageUrl = await _blobStorageService.UploadImageAsync(dto.BannerImage);
+
             var newEvent = new Event
             {
                 OrganiserId = userId.Value,
@@ -161,7 +168,8 @@ namespace RaceDay.Controllers
                 EventDate = dto.EventDate,
                 Location = dto.Location,
                 Distance = dto.Distance,
-                EventType = dto.EventType
+                EventType = dto.EventType,
+                BannerImageUrl = bannerImageUrl ?? ""
             };
 
             _context.Events.Add(newEvent);
@@ -177,14 +185,15 @@ namespace RaceDay.Controllers
                 Location = newEvent.Location,
                 Distance = newEvent.Distance,
                 EventType = newEvent.EventType,
+                BannerImageUrl = newEvent.BannerImageUrl,
                 CreatedAt = newEvent.CreatedAt
             });
         }
 
-        /// <summary>Updates an existing event. Organiser must own the event.</summary>
+        /// <summary>Updates an existing event with optional banner image. Organiser must own the event.</summary>
         // PUT /api/events/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEvent(int id, [FromBody] UpdateEventDTO dto)
+        public async Task<IActionResult> UpdateEvent(int id, [FromForm] UpdateEventDTO dto)
         {
             var userId = HttpContext.Session.GetInt32("UserId");
             var role = HttpContext.Session.GetString("Role");
@@ -201,6 +210,13 @@ namespace RaceDay.Controllers
 
             if (!new[] { "Run", "Walk", "Cycle" }.Contains(dto.EventType))
                 return BadRequest(new { message = "EventType must be Run, Walk, or Cycle." });
+
+            if (dto.BannerImage != null && dto.BannerImage.Length > 0)
+            {
+                if (!string.IsNullOrEmpty(existingEvent.BannerImageUrl))
+                    await _blobStorageService.DeleteImageAsync(existingEvent.BannerImageUrl);
+                existingEvent.BannerImageUrl = await _blobStorageService.UploadImageAsync(dto.BannerImage);
+            }
 
             existingEvent.EventName = dto.EventName;
             existingEvent.Description = dto.Description;
@@ -231,6 +247,9 @@ namespace RaceDay.Controllers
 
             if (existingEvent.OrganiserId != userId)
                 return StatusCode(403, new { message = "You can only delete your own events." });
+
+            if (!string.IsNullOrEmpty(existingEvent.BannerImageUrl))
+                await _blobStorageService.DeleteImageAsync(existingEvent.BannerImageUrl);
 
             _context.Events.Remove(existingEvent);
             await _context.SaveChangesAsync();

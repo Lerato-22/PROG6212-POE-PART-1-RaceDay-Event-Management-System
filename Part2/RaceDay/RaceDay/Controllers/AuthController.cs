@@ -18,7 +18,6 @@ namespace RaceDay.Controllers
         }
 
         /// <summary>Registers a new user as either an Organiser or Participant.</summary>
-        // POST /api/auth/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO dto)
         {
@@ -27,6 +26,12 @@ namespace RaceDay.Controllers
 
             if (!new[] { "Organiser", "Participant" }.Contains(dto.Role))
                 return BadRequest(new { message = "Role must be Organiser or Participant." });
+
+            // Check for duplicate email
+            var existing = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (existing != null)
+                return Conflict(new { message = "An account with this email already exists." });
+
             var user = new User
             {
                 FirstName = dto.FirstName,
@@ -40,7 +45,6 @@ namespace RaceDay.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Create empty profile
             var profile = new Profile { UserId = user.UserId };
             _context.Profiles.Add(profile);
             await _context.SaveChangesAsync();
@@ -58,7 +62,6 @@ namespace RaceDay.Controllers
         }
 
         /// <summary>Logs in a user and creates a session storing their ID and role.</summary>
-        // POST /api/auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
@@ -67,7 +70,14 @@ namespace RaceDay.Controllers
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            // Store in session
+            // Check user exists
+            if (user == null)
+                return Unauthorized(new { message = "Invalid email or password." });
+
+            // Verify password
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+                return Unauthorized(new { message = "Invalid email or password." });
+
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("Role", user.Role);
             HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.LastName}");
@@ -86,7 +96,6 @@ namespace RaceDay.Controllers
         }
 
         /// <summary>Logs out the current user and clears their session.</summary>
-        // POST /api/auth/logout
         [HttpPost("logout")]
         public IActionResult Logout()
         {

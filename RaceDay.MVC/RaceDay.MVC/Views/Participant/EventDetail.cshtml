@@ -1,0 +1,83 @@
+﻿@model RaceDay.MVC.Models.EventModel
+@{
+
+}
+
+@if (!string.IsNullOrEmpty(Model.BannerImageUrl))
+{
+    <div class="mb-4" style="border-radius:12px; overflow:hidden; max-height:300px;">
+        <img src="@Model.BannerImageUrl" alt="@Model.Name banner" class="w-100" style="object-fit:cover; max-height:300px;" />
+    </div>
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h4>@Model.Name</h4>
+        <p>@Model.Date.ToString("dd MMM yyyy") &nbsp;|&nbsp; @Model.Location</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-light btn-sm">Back to Events</a>
+</div>
+
+<div class="row">
+    <div class="col-md-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header">Event Information</div>
+            <div class="card-body p-4">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <td class="fw-semibold text-muted" style="width:140px">Type</td>
+                        <td><span class="badge bg-secondary">@Model.EventType</span></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold text-muted">Date</td>
+                        <td>@Model.Date.ToString("dd MMMM yyyy, HH:mm")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold text-muted">Location</td>
+                        <td>@Model.Location</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold text-muted">Distance</td>
+                        <td>@Model.Distance km</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-semibold text-muted">Description</td>
+                        <td>@Model.Description</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header">Enrol for this Event</div>
+            <div class="card-body p-4">
+                @{
+                    var categories = ViewBag.Categories as List<RaceDay.MVC.Models.CategoryModel>;
+                }
+                @if (categories == null || !categories.Any())
+                {
+                    <p class="text-muted">No categories available for this event yet.</p>
+                }
+                else
+                {
+                    <form asp-action="Enrol" method="post">
+                        <input type="hidden" name="EventId" value="@Model.EventId" />
+                        <div class="mb-4">
+                            <label class="form-label">Select Category</label>
+                            <select name="CategoryId" class="form-select">
+                                <option value="">-- Select a category --</option>
+                                @foreach (var cat in categories)
+                                {
+                                    <option value="@cat.CategoryId">@cat.Name (@cat.Type)</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Confirm Enrolment</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>

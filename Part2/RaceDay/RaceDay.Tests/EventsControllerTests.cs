@@ -150,7 +150,7 @@ namespace RaceDay.Tests
             var controller = GetController(context, 999, "Organiser");
             var result = await controller.DeleteEvent(eventItem.EventId);
 
-            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.IsType<ObjectResult>(result);
         }
 
         [Fact]

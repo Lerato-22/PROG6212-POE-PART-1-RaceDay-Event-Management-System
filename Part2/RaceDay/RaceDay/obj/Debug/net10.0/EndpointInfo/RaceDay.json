@@ -1,8 +1,13 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "RaceDay",
-    "version": "1.0"
+    "title": "RaceDay API",
+    "description": "RESTful API for the RaceDay Event Management System. Supports Organiser and Participant roles for managing road running, walking, and cycling events across South Africa.",
+    "contact": {
+      "name": "Lerato Maropola",
+      "email": "ST10449273@rcconnect.edu.za"
+    },
+    "version": "v1"
   },
   "paths": {
     "/api/auth/register": {

@@ -1,0 +1,64 @@
+﻿@model List<RaceDay.MVC.Models.EventModel>
+@{
+    ViewData["Title"] = "Upcoming Events";
+}
+
+<div class="page-header">
+    <h4>Upcoming Events</h4>
+    <p>Browse and enrol in road running, walking and cycling events</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body py-3">
+        <form method="get" class="row g-2">
+            <div class="col-md-6">
+                <input name="search" value="@ViewBag.Search" class="form-control"
+                       placeholder="Search by event name..." />
+            </div>
+            <div class="col-md-4">
+                <select name="eventType" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="Run" selected="@(ViewBag.EventType == "Run")">Run</option>
+                    <option value="Walk" selected="@(ViewBag.EventType == "Walk")">Walk</option>
+                    <option value="Cycle" selected="@(ViewBag.EventType == "Cycle")">Cycle</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card">
+        <div class="card-body text-center py-5 text-muted">
+            No events found matching your search.
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var ev in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card event-card h-100">
+                    <div class="card-body">
+                        <span class="badge bg-secondary mb-2">@ev.EventType</span>
+                        <h5 class="card-title fw-bold">@ev.Name</h5>
+                        <p class="text-muted small mb-1">@ev.Date.ToString("dd MMM yyyy")</p>
+                        <p class="text-muted small mb-1">@ev.Location</p>
+                        <p class="text-muted small mb-3">@ev.Distance km</p>
+                        <p class="card-text small">@ev.Description</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <a asp-action="EventDetail" asp-route-id="@ev.EventId"
+                           class="btn btn-primary btn-sm w-100">View & Enrol</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

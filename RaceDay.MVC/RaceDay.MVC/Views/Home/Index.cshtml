@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="page-header text-center">
+    <h2 class="fw-bold">RaceDay Event Management</h2>
+    <p>South Africa's platform for road running, walking and cycling events</p>
+</div>
+
+<div class="row text-center mt-4">
+    <div class="col-md-4 mb-3">
+        <div class="stat-tile">
+            <div class="stat-label mb-2">For Participants</div>
+            <p class="text-muted">Browse upcoming events, enrol in your category, and track your race history.</p>
+            <a asp-controller="Auth" asp-action="Register" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="stat-tile">
+            <div class="stat-label mb-2">For Organisers</div>
+            <p class="text-muted">Create and manage events, define categories, view enrolments and capture results.</p>
+            <a asp-controller="Auth" asp-action="Register" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="stat-tile">
+            <div class="stat-label mb-2">Already Registered?</div>
+            <p class="text-muted">Sign in to access your dashboard and manage your events or results.</p>
+            <a asp-controller="Auth" asp-action="Login" class="btn btn-outline-secondary btn-sm">Sign In</a>
+        </div>
+    </div>
+</div>
