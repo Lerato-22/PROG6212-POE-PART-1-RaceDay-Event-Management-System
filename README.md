@@ -483,22 +483,4 @@ The `.github/workflows/ci.yml` pipeline runs on every push and pull request to `
 
 ---
 
-## 📌 Submission Checklist
-
-| Requirement | Part 1 | Part 2 | Part 3 |
-|-------------|--------|--------|--------|
-| GitHub repository with code |
-| Minimum 20 meaningful commits | 
-| README with setup instructions | 
-| CI/CD green build screenshot | 
-| YouTube video
-| `/docs` folder with ERD, endpoint plan, SQL | 
-| Working API with Swagger |
-| Unit tests passing | 
-| MVC consuming API | 
-| Azure Blob Storage | 
-| Dockerfile | 
-
----
-
 *© 2026 Lerato Maropola — ST10449273 — The Independent Institute of Education*
